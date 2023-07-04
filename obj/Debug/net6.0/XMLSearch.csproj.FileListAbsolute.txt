@@ -1,0 +1,15 @@
+C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\bin\Debug\net6.0\XMLSearch.exe
+C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\bin\Debug\net6.0\XMLSearch.deps.json
+C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\bin\Debug\net6.0\XMLSearch.runtimeconfig.json
+C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\bin\Debug\net6.0\XMLSearch.dll
+C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\bin\Debug\net6.0\XMLSearch.pdb
+C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\obj\Debug\net6.0\XMLSearch.csproj.AssemblyReference.cache
+C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\obj\Debug\net6.0\XMLSearch.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\obj\Debug\net6.0\XMLSearch.AssemblyInfoInputs.cache
+C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\obj\Debug\net6.0\XMLSearch.AssemblyInfo.cs
+C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\obj\Debug\net6.0\XMLSearch.csproj.CoreCompileInputs.cache
+C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\obj\Debug\net6.0\XMLSearch.dll
+C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\obj\Debug\net6.0\refint\XMLSearch.dll
+C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\obj\Debug\net6.0\XMLSearch.pdb
+C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\obj\Debug\net6.0\XMLSearch.genruntimeconfig.cache
+C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\obj\Debug\net6.0\ref\XMLSearch.dll
