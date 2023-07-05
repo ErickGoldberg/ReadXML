@@ -2,6 +2,7 @@
 using System.Xml;
 using System.Xml.XPath;
 using XMLSearch.Data;
+using XMLSearch.Utils;
 
 namespace XMLSearch.Helper
 {
@@ -41,7 +42,7 @@ namespace XMLSearch.Helper
                 {
                     try
                     {
-                        string InfCte = InfCteNode.Attributes["Id"]?.Value;
+                        string InfCte = XMLUtils.GetAttributeValue(InfCteNode, "Id");
                         if (!string.IsNullOrEmpty(InfCte))
                         {
                             return InfCte.Substring(3);
@@ -68,7 +69,6 @@ namespace XMLSearch.Helper
             return string.Empty;
         }
 
-
         public int ProcessNCT(XmlDocument doc2)
         {
             try
@@ -76,14 +76,8 @@ namespace XMLSearch.Helper
                 XmlNode nCTNode = doc2.SelectSingleNode("//cte:nCT", GetNamespaceManager(doc2));
                 if (nCTNode != null)
                 {
-                    try
-                    {
-                        return int.Parse(nCTNode.InnerText);
-                    }
-                    catch (FormatException)
-                    {
-                        Console.WriteLine("Erro ao converter para int.");
-                    }
+                    string nCTValue = nCTNode.InnerText;
+                    return XMLUtils.ParseValue<int>(nCTValue);
                 }
                 else
                 {
@@ -104,14 +98,8 @@ namespace XMLSearch.Helper
                 XmlNode dhEmiNode = doc2.SelectSingleNode("//cte:dhEmi", GetNamespaceManager(doc2));
                 if (dhEmiNode != null)
                 {
-                    try
-                    {
-                        return DateTime.Parse(dhEmiNode.InnerText);
-                    }
-                    catch (FormatException)
-                    {
-                        Console.WriteLine("Erro ao converter para DateTime.");
-                    }
+                    string dhEmiValue = dhEmiNode.InnerText;
+                    return XMLUtils.ParseValue<DateTime>(dhEmiValue);
                 }
                 else
                 {
@@ -131,14 +119,7 @@ namespace XMLSearch.Helper
             try
             {
                 XmlNode emitCNPJNode = doc2.SelectSingleNode("//cte:emit/cte:CNPJ", GetNamespaceManager(doc2));
-                if (emitCNPJNode != null)
-                {
-                    return emitCNPJNode.InnerText;
-                }
-                else
-                {
-                    Console.WriteLine("Elemento emitCNPJ não encontrado.");
-                }
+                return emitCNPJNode?.InnerText;
             }
             catch (Exception ex)
             {
@@ -152,14 +133,7 @@ namespace XMLSearch.Helper
             try
             {
                 XmlNode destCNPJNode = doc2.SelectSingleNode("//cte:dest/cte:CNPJ", GetNamespaceManager(doc2));
-                if (destCNPJNode != null)
-                {
-                    return destCNPJNode.InnerText;
-                }
-                else
-                {
-                    Console.WriteLine("Elemento destCNPJ não encontrado.");
-                }
+                return destCNPJNode?.InnerText;
             }
             catch (Exception ex)
             {
@@ -173,14 +147,7 @@ namespace XMLSearch.Helper
             try
             {
                 XmlNode remCNPJNode = doc2.SelectSingleNode("//cte:rem/cte:CNPJ", GetNamespaceManager(doc2));
-                if (remCNPJNode != null)
-                {
-                    return remCNPJNode.InnerText;
-                }
-                else
-                {
-                    Console.WriteLine("Elemento remCNPJ não encontrado.");
-                }
+                return remCNPJNode?.InnerText;
             }
             catch (Exception ex)
             {
@@ -194,14 +161,7 @@ namespace XMLSearch.Helper
             try
             {
                 XmlNode emitXNomeNode = doc2.SelectSingleNode("//cte:emit/cte:xNome", GetNamespaceManager(doc2));
-                if (emitXNomeNode != null)
-                {
-                    return emitXNomeNode.InnerText;
-                }
-                else
-                {
-                    Console.WriteLine("Elemento emitXNome não encontrado.");
-                }
+                return emitXNomeNode?.InnerText;
             }
             catch (Exception ex)
             {
@@ -215,14 +175,7 @@ namespace XMLSearch.Helper
             try
             {
                 XmlNode destXNomeNode = doc2.SelectSingleNode("//cte:dest/cte:xNome", GetNamespaceManager(doc2));
-                if (destXNomeNode != null)
-                { 
-                return destXNomeNode.InnerText;
-                }
-                else
-                {
-                    Console.WriteLine("Elemento destXNome não encontrado.");
-                }
+                return destXNomeNode?.InnerText;
             }
             catch (Exception ex)
             {
@@ -236,14 +189,7 @@ namespace XMLSearch.Helper
             try
             {
                 XmlNode remXNomeNode = doc2.SelectSingleNode("//cte:rem/cte:xNome", GetNamespaceManager(doc2));
-                if (remXNomeNode != null)
-                {
-                    return remXNomeNode.InnerText;
-                }
-                else
-                {
-                    Console.WriteLine("Elemento remXNome não encontrado.");
-                }
+                return remXNomeNode?.InnerText;
             }
             catch (Exception ex)
             {
@@ -252,7 +198,6 @@ namespace XMLSearch.Helper
             return string.Empty;
         }
 
-
         public double ProcessvCte(XmlDocument doc2)
         {
             try
@@ -260,14 +205,8 @@ namespace XMLSearch.Helper
                 XmlNode vNFNode = doc2.SelectSingleNode("//cte:infCTeNorm/cte:infCarga/cte:vCarga", GetNamespaceManager(doc2));
                 if (vNFNode != null)
                 {
-                    try
-                    {
-                        return double.Parse(vNFNode.InnerText);
-                    }
-                    catch (FormatException)
-                    {
-                        Console.WriteLine("Erro ao converter para double.");
-                    }
+                    string vNFValue = vNFNode.InnerText;
+                    return XMLUtils.ParseValue<double>(vNFValue);
                 }
                 else
                 {
@@ -280,6 +219,6 @@ namespace XMLSearch.Helper
             }
             return 0.0;
         }
-
     }
+
 }

@@ -1,5 +1,7 @@
-﻿using System.Xml;
+﻿using System;
+using System.Xml;
 using XMLSearch.Data;
+using XMLSearch.Utils;
 
 namespace XMLSearch.Helper
 {
@@ -37,7 +39,7 @@ namespace XMLSearch.Helper
                 {
                     try
                     {
-                        string infNfeId = infNfeNode.Attributes["Id"]?.Value;
+                        string infNfeId = XMLUtils.GetAttributeValue(infNfeNode, "Id");
                         if (!string.IsNullOrEmpty(infNfeId))
                         {
                             return infNfeId.Substring(3);
@@ -64,7 +66,6 @@ namespace XMLSearch.Helper
             return string.Empty;
         }
 
-
         public int ProcessNNF(XmlDocument doc)
         {
             try
@@ -72,14 +73,8 @@ namespace XMLSearch.Helper
                 XmlNode nNFNode = doc.SelectSingleNode("//nfe:nNF", GetNamespaceManager(doc));
                 if (nNFNode != null)
                 {
-                    try
-                    {
-                        return int.Parse(nNFNode.InnerText);
-                    }
-                    catch (FormatException)
-                    {
-                        Console.WriteLine("Erro ao converter para int.");
-                    }
+                    string nNFValue = nNFNode.InnerText;
+                    return XMLUtils.ParseValue<int>(nNFValue);
                 }
                 else
                 {
@@ -93,11 +88,26 @@ namespace XMLSearch.Helper
             return 0;
         }
 
-
         public DateTime ProcessDhEmi(XmlDocument doc)
         {
-            XmlNode dhEmiNode = doc.SelectSingleNode("//nfe:dhEmi", GetNamespaceManager(doc));
-            return DateTime.Parse(dhEmiNode?.InnerText);
+            try
+            {
+                XmlNode dhEmiNode = doc.SelectSingleNode("//nfe:dhEmi", GetNamespaceManager(doc));
+                if (dhEmiNode != null)
+                {
+                    string dhEmiValue = dhEmiNode.InnerText;
+                    return XMLUtils.ParseValue<DateTime>(dhEmiValue);
+                }
+                else
+                {
+                    Console.WriteLine("Elemento dhEmi não encontrado.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao processar XmlDocument: {ex.Message}");
+            }
+            return DateTime.MinValue;
         }
 
         public string ProcessEmitCNPJ(XmlDocument doc)
@@ -105,14 +115,7 @@ namespace XMLSearch.Helper
             try
             {
                 XmlNode emitCNPJNode = doc.SelectSingleNode("//nfe:emit/nfe:CNPJ", GetNamespaceManager(doc));
-                if (emitCNPJNode != null)
-                {
-                    return emitCNPJNode.InnerText;
-                }
-                else
-                {
-                    Console.WriteLine("Elemento emitCNPJ não encontrado.");
-                }
+                return emitCNPJNode?.InnerText;
             }
             catch (Exception ex)
             {
@@ -126,14 +129,7 @@ namespace XMLSearch.Helper
             try
             {
                 XmlNode destCNPJNode = doc.SelectSingleNode("//nfe:dest/nfe:CNPJ", GetNamespaceManager(doc));
-                if (destCNPJNode != null)
-                {
-                    return destCNPJNode.InnerText;
-                }
-                else
-                {
-                    Console.WriteLine("Elemento destCNPJ não encontrado.");
-                }
+                return destCNPJNode?.InnerText;
             }
             catch (Exception ex)
             {
@@ -147,14 +143,7 @@ namespace XMLSearch.Helper
             try
             {
                 XmlNode emitXNomeNode = doc.SelectSingleNode("//nfe:emit/nfe:xNome", GetNamespaceManager(doc));
-                if (emitXNomeNode != null)
-                {
-                    return emitXNomeNode.InnerText;
-                }
-                else
-                {
-                    Console.WriteLine("Elemento emitXNome não encontrado.");
-                }
+                return emitXNomeNode?.InnerText;
             }
             catch (Exception ex)
             {
@@ -168,14 +157,7 @@ namespace XMLSearch.Helper
             try
             {
                 XmlNode destXNomeNode = doc.SelectSingleNode("//nfe:dest/nfe:xNome", GetNamespaceManager(doc));
-                if (destXNomeNode != null)
-                {
-                    return destXNomeNode.InnerText;
-                }
-                else
-                {
-                    Console.WriteLine("Elemento destXNome não encontrado.");
-                }
+                return destXNomeNode?.InnerText;
             }
             catch (Exception ex)
             {
@@ -184,34 +166,26 @@ namespace XMLSearch.Helper
             return string.Empty;
         }
 
-
         public double ProcessVNF(XmlDocument doc)
-{
-    try
-    {
-        XmlNode vNFNode = doc.SelectSingleNode("//nfe:total/nfe:ICMSTot/nfe:vNF", GetNamespaceManager(doc));
-        if (vNFNode != null)
         {
             try
             {
-                return double.Parse(vNFNode.InnerText);
+                XmlNode vNFNode = doc.SelectSingleNode("//nfe:total/nfe:ICMSTot/nfe:vNF", GetNamespaceManager(doc));
+                if (vNFNode != null)
+                {
+                    string vNFValue = vNFNode.InnerText;
+                    return XMLUtils.ParseValue<double>(vNFValue);
+                }
+                else
+                {
+                    Console.WriteLine("Elemento vNF não encontrado.");
+                }
             }
-            catch (FormatException)
-            { 
-                Console.WriteLine("Erro ao converter para double.");
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao processar XmlDocument: {ex.Message}");
             }
+            return 0.0;
         }
-        else
-        {
-            Console.WriteLine("Elemento vNF não encontrado.");
-        }
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Erro ao processar XmlDocument: {ex.Message}");
-    }
-    return 0.0;
-}
-
     }
 }

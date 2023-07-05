@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Xml;
 using XMLSearch.Data;
+using XMLSearch.Utils;
 
 namespace XMLSearch.Helper
 {
@@ -20,19 +21,6 @@ namespace XMLSearch.Helper
         {
             XmlNamespaceManager namespaceManager = GetNamespaceManager(doc3);
             return doc3.SelectSingleNode(xPath, namespaceManager);
-        }
-
-        private string GetAttributeValue(XmlNode node, string attributeName)
-        {
-            return node?.Attributes?[attributeName]?.Value;
-        }
-
-        private T ParseValue<T>(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-                return default;
-
-            return (T)Convert.ChangeType(value, typeof(T));
         }
 
         public CFE ReaderCfe(XmlDocument doc3)
@@ -57,7 +45,7 @@ namespace XMLSearch.Helper
                 {
                     try
                     {
-                        string infCfeId = GetAttributeValue(infCfeNode, "Id");
+                        string infCfeId = XMLUtils.GetAttributeValue(infCfeNode, "Id");
                         if (!string.IsNullOrEmpty(infCfeId))
                         {
                             return infCfeId.Substring(3);
@@ -73,7 +61,7 @@ namespace XMLSearch.Helper
                     }
                 }
                 else
-                { 
+                {
                     Console.WriteLine("Elemento infCFe não encontrado.");
                 }
             }
@@ -92,7 +80,7 @@ namespace XMLSearch.Helper
                 if (cNFNode != null)
                 {
                     string cNFValue = cNFNode.InnerText;
-                    return ParseValue<int>(cNFValue);
+                    return XMLUtils.ParseValue<int>(cNFValue);
                 }
                 else
                 {
@@ -122,7 +110,7 @@ namespace XMLSearch.Helper
                     }
                     else
                     {
-                        Console.WriteLine("Valor não pode ser convertido para DateTime.");
+                        Console.WriteLine("Valor nãopode ser convertido para DateTime.");
                     }
                 }
                 else
@@ -196,15 +184,7 @@ namespace XMLSearch.Helper
                 if (vCFeNode != null)
                 {
                     string vCFeValue = vCFeNode.InnerText;
-                    double parsedValue;
-                    if (double.TryParse(vCFeValue, out parsedValue))
-                    {
-                        return parsedValue;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Valor não pode ser convertido para double.");
-                    }
+                    return XMLUtils.ParseValue<double>(vCFeValue);
                 }
                 else
                 {
