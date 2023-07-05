@@ -1,5 +1,4 @@
-﻿using System;
-using System.Xml;
+﻿using System.Xml;
 using XMLSearch.Data;
 
 namespace XMLSearch.Helper
@@ -15,12 +14,8 @@ namespace XMLSearch.Helper
             return namespaceManager;
         }
 
-        public NFE ReaderNfe(string filePath)
+        public NFE ReaderNfe(XmlDocument doc)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(filePath);
-
-
             var nfe = new NFE();
             nfe.inNfe = ProcessInfNFe(doc);
             nfe.nNF = ProcessNNF(doc);
@@ -35,16 +30,69 @@ namespace XMLSearch.Helper
 
         public string ProcessInfNFe(XmlDocument doc)
         {
-            XmlNode infNfeNode = doc.SelectSingleNode("//nfe:infNFe", GetNamespaceManager(doc));
-            string infNfeId = infNfeNode?.Attributes["Id"]?.Value;
-            return infNfeId?.Substring(3);
+            try
+            {
+                XmlNode infNfeNode = doc.SelectSingleNode("//nfe:infNFe", GetNamespaceManager(doc));
+                if (infNfeNode != null)
+                {
+                    try
+                    {
+                        string infNfeId = infNfeNode.Attributes["Id"]?.Value;
+                        if (!string.IsNullOrEmpty(infNfeId))
+                        {
+                            return infNfeId.Substring(3);
+                        }
+                        else
+                        {
+                            Console.WriteLine("ID do elemento infNFe não encontrado.");
+                        }
+                    }
+                    catch (NullReferenceException)
+                    {
+                        Console.WriteLine("Atributo 'Id' do elemento infNFe não encontrado.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Elemento infNFe não encontrado.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao processar XmlDocument: {ex.Message}");
+            }
+            return string.Empty;
         }
+
 
         public int ProcessNNF(XmlDocument doc)
         {
-            XmlNode nNFNode = doc.SelectSingleNode("//nfe:nNF", GetNamespaceManager(doc));
-            return int.Parse(nNFNode?.InnerText);
+            try
+            {
+                XmlNode nNFNode = doc.SelectSingleNode("//nfe:nNF", GetNamespaceManager(doc));
+                if (nNFNode != null)
+                {
+                    try
+                    {
+                        return int.Parse(nNFNode.InnerText);
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Erro ao converter para int.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Elemento nNF não encontrado.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao processar XmlDocument: {ex.Message}");
+            }
+            return 0;
         }
+
 
         public DateTime ProcessDhEmi(XmlDocument doc)
         {
@@ -54,32 +102,116 @@ namespace XMLSearch.Helper
 
         public string ProcessEmitCNPJ(XmlDocument doc)
         {
-            XmlNode emitCNPJNode = doc.SelectSingleNode("//nfe:emit/nfe:CNPJ", GetNamespaceManager(doc));
-            return emitCNPJNode?.InnerText;
+            try
+            {
+                XmlNode emitCNPJNode = doc.SelectSingleNode("//nfe:emit/nfe:CNPJ", GetNamespaceManager(doc));
+                if (emitCNPJNode != null)
+                {
+                    return emitCNPJNode.InnerText;
+                }
+                else
+                {
+                    Console.WriteLine("Elemento emitCNPJ não encontrado.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao processar XmlDocument: {ex.Message}");
+            }
+            return string.Empty;
         }
 
         public string ProcessDestCNPJ(XmlDocument doc)
         {
-            XmlNode destCNPJNode = doc.SelectSingleNode("//nfe:dest/nfe:CNPJ", GetNamespaceManager(doc));
-            return destCNPJNode?.InnerText;
+            try
+            {
+                XmlNode destCNPJNode = doc.SelectSingleNode("//nfe:dest/nfe:CNPJ", GetNamespaceManager(doc));
+                if (destCNPJNode != null)
+                {
+                    return destCNPJNode.InnerText;
+                }
+                else
+                {
+                    Console.WriteLine("Elemento destCNPJ não encontrado.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao processar XmlDocument: {ex.Message}");
+            }
+            return string.Empty;
         }
 
         public string ProcessEmitXNome(XmlDocument doc)
         {
-            XmlNode emitXNomeNode = doc.SelectSingleNode("//nfe:emit/nfe:xNome", GetNamespaceManager(doc));
-            return emitXNomeNode?.InnerText;
+            try
+            {
+                XmlNode emitXNomeNode = doc.SelectSingleNode("//nfe:emit/nfe:xNome", GetNamespaceManager(doc));
+                if (emitXNomeNode != null)
+                {
+                    return emitXNomeNode.InnerText;
+                }
+                else
+                {
+                    Console.WriteLine("Elemento emitXNome não encontrado.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao processar XmlDocument: {ex.Message}");
+            }
+            return string.Empty;
         }
 
         public string ProcessDestXNome(XmlDocument doc)
         {
-            XmlNode destXNomeNode = doc.SelectSingleNode("//nfe:dest/nfe:xNome", GetNamespaceManager(doc));
-            return destXNomeNode?.InnerText;
+            try
+            {
+                XmlNode destXNomeNode = doc.SelectSingleNode("//nfe:dest/nfe:xNome", GetNamespaceManager(doc));
+                if (destXNomeNode != null)
+                {
+                    return destXNomeNode.InnerText;
+                }
+                else
+                {
+                    Console.WriteLine("Elemento destXNome não encontrado.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao processar XmlDocument: {ex.Message}");
+            }
+            return string.Empty;
         }
 
+
         public double ProcessVNF(XmlDocument doc)
+{
+    try
+    {
+        XmlNode vNFNode = doc.SelectSingleNode("//nfe:total/nfe:ICMSTot/nfe:vNF", GetNamespaceManager(doc));
+        if (vNFNode != null)
         {
-            XmlNode vNFNode = doc.SelectSingleNode("//nfe:total/nfe:ICMSTot/nfe:vNF", GetNamespaceManager(doc));
-            return double.Parse(vNFNode?.InnerText);
+            try
+            {
+                return double.Parse(vNFNode.InnerText);
+            }
+            catch (FormatException)
+            { 
+                Console.WriteLine("Erro ao converter para double.");
+            }
         }
+        else
+        {
+            Console.WriteLine("Elemento vNF não encontrado.");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Erro ao processar XmlDocument: {ex.Message}");
+    }
+    return 0.0;
+}
+
     }
 }
