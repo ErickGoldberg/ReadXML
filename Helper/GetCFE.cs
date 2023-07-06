@@ -66,7 +66,7 @@ namespace XMLSearch.Helper
             return 0;
         }
 
-        public string ProcessDhEmi(XmlDocument doc3)
+        public DateTime ProcessDhEmi(XmlDocument doc3)
         {
             XmlNode dhEmiNode = XMLUtils.GetNode(doc3, "//infCFe/ide/dEmi", "cfe", "http://www.portalfiscal.inf.br/cfe");
             if (dhEmiNode != null)
@@ -76,7 +76,7 @@ namespace XMLSearch.Helper
 
                 if (DateTime.TryParseExact(dhEmiValue, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out dhEmiDateTime))
                 {
-                    return dhEmiDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+                    return dhEmiDateTime;
                 }
                 else
                 {
@@ -87,7 +87,7 @@ namespace XMLSearch.Helper
             {
                 Console.WriteLine("Elemento dhEmi não encontrado.");
             }
-            return string.Empty;
+            return DateTime.MinValue;
         }
 
         public string ProcessEmitCNPJ(XmlDocument doc3)

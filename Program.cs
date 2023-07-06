@@ -1,4 +1,6 @@
-﻿using System.Xml;
+﻿using System;
+using System.Xml;
+using System.IO;
 using XMLSearch.Data;
 using XMLSearch.Helper;
 
@@ -8,60 +10,64 @@ namespace SeuNamespace
     {
         static void Main(string[] args)
         {
-            XmlDocument nfeDoc = new XmlDocument();
-            nfeDoc.Load(@"C:\Users\Dev\Downloads\31230760409075009613550010020302676872200497.xml");
-            GetNFE getNFE = new GetNFE();
-            NFE nfe = getNFE.ReaderNfe(nfeDoc);
+            string pastaOrigem = @"C:\Users\Dev\Desktop\XMLs";
+            string pastaDestinoBase = @"C:\Users\Dev\Desktop\XMLsOrganizados";
 
-            Console.WriteLine("********************************************************");
-            Console.WriteLine("Aqui estão os dados da Nfe: \n");
-            Console.WriteLine("infNfe:Id: " + nfe.inNfe);
-            Console.WriteLine("nNF: " + nfe.nNF);
-            Console.WriteLine("dhEmi: " + nfe.dhEmi);
-            Console.WriteLine("emitXNome: " + nfe.emitXNome);
-            Console.WriteLine("emitCnpj: " + nfe.emitCnpj);
-            Console.WriteLine("destXNome: " + nfe.destXNome);
-            Console.WriteLine("destCnpj: " + nfe.destCnpj);
-            Console.WriteLine("vNF: " + nfe.vNF);
+            string[] arquivosXml = Directory.GetFiles(pastaOrigem, "*.xml");
 
-            XmlDocument cteDoc = new XmlDocument();
-            cteDoc.Load(@"C:/Users/Dev/Downloads/35230766812736000172570000003126911417922055.xml");
-            GetCTE getCTE = new GetCTE();
-            CTE cte = getCTE.ReaderCte(cteDoc);
+            foreach (string arquivoXml in arquivosXml)
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(arquivoXml);
 
-            Console.WriteLine("********************************************************");
-            Console.WriteLine("Aqui estão os dados da Cte: \n");
-       
-            Console.WriteLine("infCte: " + cte.infCte);
-            Console.WriteLine("nCT: " + cte.nCT);
-            Console.WriteLine("dhEmi: " + cte.dhEmi);
-            Console.WriteLine("emitCnpj: " + cte.emitCnpj);
-            Console.WriteLine("emitXNome: " + cte.emitXNome);
-            Console.WriteLine("remCnpj: " + cte.remCnpj);
-            Console.WriteLine("remXNome: " + cte.remXNome);
-            Console.WriteLine("destCnpj: " + cte.destCnpj);
-            Console.WriteLine("destXNome: " + cte.destXNome);
-            Console.WriteLine("vCte: " + cte.vCte);
+                string tipoArquivo = XmlTypeIdentifier.IdentifyXmlType(arquivoXml);
+                Console.WriteLine($"Arquivo: {arquivoXml} | Tipo: {tipoArquivo}");
 
+                string cnpj = null;
+                DateTime dataEmi = DateTime.MinValue;
+                double numeroNota = 0.0;
 
-            XmlDocument cfeDoc = new XmlDocument();
-            cfeDoc.Load(@"C:/Users/Dev/Downloads/35230457541070000174590001627770320902298517.xml");
-            GetCFE getCFE = new GetCFE();
-            CFE cfe = getCFE.ReaderCfe(cfeDoc);
+                switch (tipoArquivo)
+                {
+                    case "NFE":
+                        NFE nfe = new GetNFE().ReaderNfe(doc);
+                        cnpj = nfe.destCnpj;
+                        dataEmi = nfe.dhEmi;
+                        numeroNota = nfe.vNF;
+                        break;
+                    case "CFE":
+                        CFE cfe = new GetCFE().ReaderCfe(doc);
+                        cnpj = cfe.emitCnpj;
+                        dataEmi = cfe.dhEmi;
+                        numeroNota = cfe.vCFe;
+                        break;
+                    case "CTE":
+                        CTE cte = new GetCTE().ReaderCte(doc);
+                        cnpj = cte.emitCnpj;
+                        dataEmi = cte.dhEmi;
+                        numeroNota = cte.vCte;
+                        break;
+                    case "NFCe":
+                        NFE nfce = new GetNFE().ReaderNfe(doc);
+                        cnpj = nfce.emitCnpj;
+                        dataEmi = nfce.dhEmi;
+                        numeroNota = nfce.vNF;
+                        break;
+                }
 
-            Console.WriteLine("********************************************************");
-            Console.WriteLine("Aqui estão os dados da Cfe: \n");
-           
-            Console.WriteLine("infCfe: " + cfe.infCfe);
-            Console.WriteLine("cNF: " + cfe.cNF);
-            Console.WriteLine("dhEmi: " + cfe.dhEmi);
-            Console.WriteLine("emitCnpj: " + cfe.emitCnpj);
-            Console.WriteLine("emitXNome: " + cfe.emitXNome);
-            Console.WriteLine("emitIE: " + cfe.emitIE);
-            Console.WriteLine("vCFe: " + cfe.vCFe);
-            Console.WriteLine("********************************************************");
-
-            Console.ReadLine();
+                if (cnpj != null && numeroNota != null)
+                {
+                    string pastaDestino = Path.Combine(pastaDestinoBase, tipoArquivo, dataEmi.Year.ToString(), dataEmi.Month.ToString(), cnpj);
+                    Directory.CreateDirectory(pastaDestino);
+                    string destinoArquivo = Path.Combine(pastaDestino, $"{numeroNota}.xml");
+                    File.Copy(arquivoXml, destinoArquivo, overwrite: true);
+                    Console.WriteLine($"Arquivo movido para: {destinoArquivo}");
+                }
+                else
+                {
+                    Console.WriteLine($"CNPJ ou número da nota é nulo para o arquivo: {arquivoXml}");
+                }
+            }
         }
     }
 }

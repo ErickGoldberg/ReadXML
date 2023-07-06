@@ -5,7 +5,7 @@ namespace XMLSearch.Data
     {
         public string infCfe { get; set; }
         public int cNF { get; set; }
-        public string dhEmi { get; set; }
+        public DateTime dhEmi { get; set; }
         public string emitCnpj { get; set; }
         public string emitXNome { get; set; }
         public string emitIE { get; set; }
