@@ -54,7 +54,6 @@ namespace SeuNamespace
                         numeroNota = nfce.vNF;
                         break;
                 }
-
                 if (cnpj != null && numeroNota != null)
                 {
                     string pastaDestino = Path.Combine(pastaDestinoBase, tipoArquivo, dataEmi.Year.ToString(), dataEmi.Month.ToString(), cnpj);
