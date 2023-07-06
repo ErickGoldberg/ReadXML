@@ -8,7 +8,6 @@ namespace SeuNamespace
     {
         static void Main(string[] args)
         {
-
             XmlDocument nfeDoc = new XmlDocument();
             nfeDoc.Load(@"C:\Users\Dev\Downloads\31230760409075009613550010020302676872200497.xml");
             GetNFE getNFE = new GetNFE();

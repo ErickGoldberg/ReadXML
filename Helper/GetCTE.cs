@@ -8,217 +8,179 @@ namespace XMLSearch.Helper
 {
     internal class GetCTE
     {
-        private XmlNamespaceManager GetNamespaceManager(XmlDocument doc)
-        {
-            XmlNamespaceManager namespaceManager = new XmlNamespaceManager(doc.NameTable);
-            namespaceManager.AddNamespace("cte", "http://www.portalfiscal.inf.br/cte");
-            // Adicione outros namespaces conforme necessário
-
-            return namespaceManager;
-        }
-
         public CTE ReaderCte(XmlDocument doc2)
         {
             var cte = new CTE();
-            cte.infCte = ProcessInfCte(doc2);
-            cte.nCT = ProcessNCT(doc2);
-            cte.dhEmi = ProcessDhEmi(doc2);
-            cte.emitXNome = ProcessEmitXNome(doc2);
-            cte.emitCnpj = ProcessEmitCNPJ(doc2);
-            cte.remXNome = ProcessRemXNome(doc2);
-            cte.remCnpj = ProcessRemCNPJ(doc2);
-            cte.destXNome = ProcessDestXNome(doc2);
-            cte.destCnpj = ProcessDestCNPJ(doc2);
-            cte.vCte = ProcessvCte(doc2);
+            try
+            {
+                cte.infCte = ProcessInfCte(doc2);
+                cte.nCT = ProcessNCT(doc2);
+                cte.dhEmi = ProcessDhEmi(doc2);
+                cte.emitXNome = ProcessEmitXNome(doc2);
+                cte.emitCnpj = ProcessEmitCNPJ(doc2);
+                cte.remXNome = ProcessRemXNome(doc2);
+                cte.remCnpj = ProcessRemCNPJ(doc2);
+                cte.destXNome = ProcessDestXNome(doc2);
+                cte.destCnpj = ProcessDestCNPJ(doc2);
+                cte.vCte = ProcessvCte(doc2);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"O documento está faltando algum valor: {ex.Message}");
+                return null;
+            }
             return cte;
         }
 
         public string ProcessInfCte(XmlDocument doc2)
         {
-            try
+            XmlNode InfCteNode = XMLUtils.GetNode(doc2, "//cte:infCte", "cte", "http://www.portalfiscal.inf.br/cte");
+            if (InfCteNode != null)
             {
-                XmlNode InfCteNode = doc2.SelectSingleNode("//cte:infCte", GetNamespaceManager(doc2));
-                if (InfCteNode != null)
+                string InfCte = XMLUtils.GetAttributeValue(InfCteNode, "Id");
+                if (!string.IsNullOrEmpty(InfCte))
                 {
-                    try
-                    {
-                        string InfCte = XMLUtils.GetAttributeValue(InfCteNode, "Id");
-                        if (!string.IsNullOrEmpty(InfCte))
-                        {
-                            return InfCte.Substring(3);
-                        }
-                        else
-                        {
-                            Console.WriteLine("ID do elemento infCte não encontrado.");
-                        }
-                    }
-                    catch (NullReferenceException)
-                    {
-                        Console.WriteLine("Atributo 'Id' do elemento infCte não encontrado.");
-                    }
+                    return InfCte.Substring(3);
                 }
                 else
                 {
-                    Console.WriteLine("Elemento infCte não encontrado.");
+                    Console.WriteLine("ID do elemento infCte não encontrado.");
                 }
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($"Erro ao processar XmlDocument: {ex.Message}");
+                Console.WriteLine("Elemento infCte não encontrado.");
             }
             return string.Empty;
         }
 
         public int ProcessNCT(XmlDocument doc2)
         {
-            try
+            XmlNode nCTNode = XMLUtils.GetNode(doc2, "//cte:nCT", "cte", "http://www.portalfiscal.inf.br/cte");
+            if (nCTNode != null)
             {
-                XmlNode nCTNode = doc2.SelectSingleNode("//cte:nCT", GetNamespaceManager(doc2));
-                if (nCTNode != null)
-                {
-                    string nCTValue = nCTNode.InnerText;
-                    return XMLUtils.ParseValue<int>(nCTValue);
-                }
-                else
-                {
-                    Console.WriteLine("Elemento nCT não encontrado.");
-                }
+                string nCTValue = nCTNode.InnerText;
+                return XMLUtils.ParseValue<int>(nCTValue);
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($"Erro ao processar XmlDocument: {ex.Message}");
+                Console.WriteLine("Elemento nCT não encontrado.");
             }
             return 0;
         }
 
         public DateTime ProcessDhEmi(XmlDocument doc2)
         {
-            try
+            XmlNode dhEmiNode = XMLUtils.GetNode(doc2, "//cte:dhEmi", "cte", "http://www.portalfiscal.inf.br/cte");
+            if (dhEmiNode != null)
             {
-                XmlNode dhEmiNode = doc2.SelectSingleNode("//cte:dhEmi", GetNamespaceManager(doc2));
-                if (dhEmiNode != null)
-                {
-                    string dhEmiValue = dhEmiNode.InnerText;
-                    return XMLUtils.ParseValue<DateTime>(dhEmiValue);
-                }
-                else
-                {
-                    Console.WriteLine("Elemento dhEmi não encontrado.");
-                }
+                string dhEmiValue = dhEmiNode.InnerText;
+                return XMLUtils.ParseValue<DateTime>(dhEmiValue);
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($"Erro ao processar XmlDocument: {ex.Message}");
+                Console.WriteLine("Elemento dhEmi não encontrado.");
             }
             return DateTime.MinValue;
         }
 
-
         public string ProcessEmitCNPJ(XmlDocument doc2)
         {
-            try
+            XmlNode emitCNPJNode = XMLUtils.GetNode(doc2, "//cte:emit/cte:CNPJ", "cte", "http://www.portalfiscal.inf.br/cte");
+            if (emitCNPJNode != null)
             {
-                XmlNode emitCNPJNode = doc2.SelectSingleNode("//cte:emit/cte:CNPJ", GetNamespaceManager(doc2));
-                return emitCNPJNode?.InnerText;
+                return emitCNPJNode.InnerText ?? string.Empty;
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($"Erro ao processar XmlDocument: {ex.Message}");
+                Console.WriteLine("Elemento emitCNPJ não encontrado.");
             }
             return string.Empty;
         }
 
         public string ProcessDestCNPJ(XmlDocument doc2)
         {
-            try
+            XmlNode destCNPJNode = XMLUtils.GetNode(doc2, "//cte:dest/cte:CNPJ", "cte", "http://www.portalfiscal.inf.br/cte");
+            if (destCNPJNode != null)
             {
-                XmlNode destCNPJNode = doc2.SelectSingleNode("//cte:dest/cte:CNPJ", GetNamespaceManager(doc2));
-                return destCNPJNode?.InnerText;
+                return destCNPJNode.InnerText ?? string.Empty;
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($"Erro ao processar XmlDocument: {ex.Message}");
+                Console.WriteLine("Elemento destCNPJ não encontrado.");
             }
             return string.Empty;
         }
 
         public string ProcessRemCNPJ(XmlDocument doc2)
         {
-            try
+            XmlNode remCNPJNode = XMLUtils.GetNode(doc2, "//cte:rem/cte:CNPJ", "cte", "http://www.portalfiscal.inf.br/cte");
+            if (remCNPJNode != null)
             {
-                XmlNode remCNPJNode = doc2.SelectSingleNode("//cte:rem/cte:CNPJ", GetNamespaceManager(doc2));
-                return remCNPJNode?.InnerText;
+                return remCNPJNode.InnerText ?? string.Empty;
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($"Erro ao processar XmlDocument: {ex.Message}");
+                Console.WriteLine("Elemento remCNPJ não encontrado.");
             }
             return string.Empty;
         }
 
         public string ProcessEmitXNome(XmlDocument doc2)
         {
-            try
+            XmlNode emitXNomeNode = XMLUtils.GetNode(doc2, "//cte:emit/cte:xNome", "cte", "http://www.portalfiscal.inf.br/cte");
+            if (emitXNomeNode != null)
             {
-                XmlNode emitXNomeNode = doc2.SelectSingleNode("//cte:emit/cte:xNome", GetNamespaceManager(doc2));
-                return emitXNomeNode?.InnerText;
+                return emitXNomeNode.InnerText ?? string.Empty;
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($"Erro ao processar XmlDocument: {ex.Message}");
+                Console.WriteLine("Elemento emitXNome não encontrado.");
             }
             return string.Empty;
         }
 
         public string ProcessDestXNome(XmlDocument doc2)
         {
-            try
+            XmlNode destXNomeNode = XMLUtils.GetNode(doc2, "//cte:dest/cte:xNome", "cte", "http://www.portalfiscal.inf.br/cte");
+            if (destXNomeNode != null)
             {
-                XmlNode destXNomeNode = doc2.SelectSingleNode("//cte:dest/cte:xNome", GetNamespaceManager(doc2));
-                return destXNomeNode?.InnerText;
+                return destXNomeNode.InnerText ?? string.Empty;
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($"Erro ao processar XmlDocument: {ex.Message}");
+                Console.WriteLine("Elemento destXNome não encontrado.");
             }
             return string.Empty;
         }
 
         public string ProcessRemXNome(XmlDocument doc2)
         {
-            try
+            XmlNode remXNomeNode = XMLUtils.GetNode(doc2, "//cte:rem/cte:xNome", "cte", "http://www.portalfiscal.inf.br/cte");
+            if (remXNomeNode != null)
             {
-                XmlNode remXNomeNode = doc2.SelectSingleNode("//cte:rem/cte:xNome", GetNamespaceManager(doc2));
-                return remXNomeNode?.InnerText;
+                return remXNomeNode.InnerText ?? string.Empty;
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($"Erro ao processar XmlDocument: {ex.Message}");
+                Console.WriteLine("Elemento remXNome não encontrado.");
             }
             return string.Empty;
         }
 
         public double ProcessvCte(XmlDocument doc2)
         {
-            try
+            XmlNode vNFNode = XMLUtils.GetNode(doc2, "//cte:infCTeNorm/cte:infCarga/cte:vCarga", "cte", "http://www.portalfiscal.inf.br/cte");
+            if (vNFNode != null)
             {
-                XmlNode vNFNode = doc2.SelectSingleNode("//cte:infCTeNorm/cte:infCarga/cte:vCarga", GetNamespaceManager(doc2));
-                if (vNFNode != null)
-                {
-                    string vNFValue = vNFNode.InnerText;
-                    return XMLUtils.ParseValue<double>(vNFValue);
-                }
-                else
-                {
-                    Console.WriteLine("Elemento vCarga não encontrado.");
-                }
+                string vNFValue = vNFNode.InnerText;
+                return XMLUtils.ParseValue<double>(vNFValue);
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($"Erro ao processar XmlDocument: {ex.Message}");
+                Console.WriteLine("Elemento vCarga não encontrado.");
             }
             return 0.0;
         }
     }
-
 }

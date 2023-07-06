@@ -2,10 +2,6 @@
 
 namespace XMLSearch.Utils
 {
-    // Trazer tudo que se repete nas classes para ca e deixar mais génerico(pode utilizar static em tudo)
-    // para chamar é só botar "XMLUtils." e a continuação
-    // e da para botar uma exceptions em algumas coisas
-    
     public class XMLUtils
     {
         public static string GetAttributeValue(XmlNode node, string attributeName)
@@ -19,6 +15,21 @@ namespace XMLSearch.Utils
                 return default;
 
             return (T)Convert.ChangeType(value, typeof(T));
+        }
+
+        public static XmlNamespaceManager GetNamespaceManager(XmlDocument doc, string namespacePrefix, string namespaceURI)
+        {
+            XmlNamespaceManager namespaceManager = new XmlNamespaceManager(doc.NameTable);
+            namespaceManager.AddNamespace(namespacePrefix, namespaceURI);
+            // Adicione outros namespaces conforme necessário
+
+            return namespaceManager;
+        }
+
+        public static XmlNode GetNode(XmlDocument doc, string xPath, string namespacePrefix, string namespaceURI)
+        {
+            XmlNamespaceManager namespaceManager = GetNamespaceManager(doc, namespacePrefix, namespaceURI);
+            return doc.SelectSingleNode(xPath, namespaceManager);
         }
     }
 }
