@@ -18,6 +18,8 @@ namespace XMLSearch
 
             string[] arquivosXml = Directory.GetFiles(pastaOrigem, "*.xml");
 
+            List<IXml> listXml = new List<IXml>();
+
             foreach (string arquivoXml in arquivosXml)
             {
                 XmlDocument doc = new XmlDocument();
@@ -30,33 +32,74 @@ namespace XMLSearch
                 DateTime dataEmi = DateTime.MinValue;
                 double numeroNota = 0.0;
 
+                #region nfe
+
+                var nfe = new GetNFE().ReaderNfe(doc);
+                string emitXNome = nfe.EmitXNome;
+                string destCnpj = nfe.DestCnpj;
+                string DestXNome = nfe.DestXNome;
+                string chaveXml = nfe.InNfe;
+           
+
+                #endregion
+
+                #region cfe
+
+                CFE cfe = new GetCFE().ReaderCfe(doc);
+                emitXNome = cfe.EmitXNome;
+                destCnpj = cfe.DestCnpj;
+                DestXNome = cfe.DestXNome;
+                chaveXml = cfe.InfCfe;
+            
+
+                #endregion
+
+                #region cte
+
+                CTE cte = new GetCTE().ReaderCte(doc);
+                emitXNome = cte.EmitXNome;
+                destCnpj = cte.DestCnpj;
+                DestXNome = cte.DestXNome;
+                chaveXml = cte.InfCte;
+              
+
+                #endregion
+
+                #region nfce
+
+                NFE nfce = new GetNFE().ReaderNfe(doc);
+                emitXNome = nfce.EmitXNome;
+                destCnpj = nfce.DestCnpj;
+                DestXNome = nfce.DestXNome;
+                chaveXml = nfce.InNfe;
+           
+
+                #endregion
+
                 switch (tipoArquivo)
                 {
                     case "NFE":
-                        var nfe = new GetNFE().ReaderNfe(doc);
                         cnpj = nfe.DestCnpj;
                         dataEmi = nfe.DhEmi;
                         numeroNota = nfe.VNF;
                         break;
                     case "CFE":
-                        CFE cfe = new GetCFE().ReaderCfe(doc);
                         cnpj = cfe.EmitCnpj;
                         dataEmi = cfe.DhEmi;
                         numeroNota = cfe.VCFe;
                         break;
                     case "CTE":
-                        CTE cte = new GetCTE().ReaderCte(doc);
                         cnpj = cte.EmitCnpj;
                         dataEmi = cte.DhEmi;
                         numeroNota = cte.VCte;
                         break;
                     case "NFCe":
-                        NFE nfce = new GetNFE().ReaderNfe(doc);
                         cnpj = nfce.EmitCnpj;
                         dataEmi = nfce.DhEmi;
                         numeroNota = nfce.VNF;
                         break;
                 }
+
                 if (cnpj != null && numeroNota != 0)
                 {
                     string pastaDestino = Path.Combine(pastaDestinoBase, tipoArquivo, dataEmi.Year.ToString(), dataEmi.Month.ToString(), cnpj);
@@ -64,16 +107,28 @@ namespace XMLSearch
                     string destinoArquivo = Path.Combine(pastaDestino, $"{numeroNota}.xml");
                     File.Copy(arquivoXml, destinoArquivo, overwrite: true);
                     Console.WriteLine($"Arquivo movido para: {destinoArquivo}");
+
+
+                    XmlData xmlObject = new XmlData
+                    {
+                        TypeXml = tipoArquivo,
+                        DhEmi = dataEmi,
+                        CnpjEmit = cnpj,
+                        EmitXNome = emitXNome, 
+                        DestCnpj = destCnpj, 
+                        DestXNome = DestXNome,
+                        NumberXml = numeroNota,
+                        XmlKey = chaveXml,
+                        Value = numeroNota
+                    };
+
+                    listXml.Add(xmlObject);
                 }
                 else
                 {
                     Console.WriteLine($"CNPJ ou número da nota é nulo para o arquivo: {arquivoXml}");
                 }
             }
-
-            List<IXml> listXml = new List<IXml>();
-
-            
 
             // Exportar para o arquivo Excel
             string excelFilePath = Path.Combine(pastaDestinoBase, "dados.xlsx");
@@ -82,6 +137,7 @@ namespace XMLSearch
 
         static void ExportToExcel(List<IXml> listXml, string filePath)
         {
+            string tipoArquivo = "";
             using (var workbook = new XLWorkbook())
             {
                 var worksheet = workbook.Worksheets.Add("XML data");
@@ -101,15 +157,31 @@ namespace XMLSearch
                 int row = 2;
                 foreach (IXml xml in listXml)
                 {
-                    worksheet.Cell(row, 1).Value = xml.TypeXml.ToString();
-                    worksheet.Cell(row, 2).Value = xml.DhEmi.ToString();
-                    worksheet.Cell(row, 3).Value = xml.CnpjEmit;
-                    worksheet.Cell(row, 4).Value = xml.EmitXNome;
-                    worksheet.Cell(row, 5).Value = xml.DestCnpj;
-                    worksheet.Cell(row, 6).Value = xml.DestXNome;
-                    worksheet.Cell(row, 7).Value = xml.NumberXml.ToString();
-                    worksheet.Cell(row, 8).Value = xml.XmlKey;
-                    worksheet.Cell(row, 9).Value = xml.Value.ToString();
+                    if(tipoArquivo != "CTE")
+                    {
+                        worksheet.Cell(row, 1).Value = xml.TypeXml.ToString();
+                        worksheet.Cell(row, 2).Value = xml.DhEmi.ToString();
+                        worksheet.Cell(row, 3).Value = xml.CnpjEmit;
+                        worksheet.Cell(row, 4).Value = xml.EmitXNome;
+                        worksheet.Cell(row, 5).Value = xml.DestCnpj;
+                        worksheet.Cell(row, 6).Value = xml.DestXNome;
+                        worksheet.Cell(row, 7).Value = xml.Value.ToString();
+                        worksheet.Cell(row, 8).Value = xml.XmlKey;
+                        worksheet.Cell(row, 9).Value = xml.Value.ToString();
+                    }
+                    else
+                    {
+                        worksheet.Cell(row, 1).Value = xml.TypeXml.ToString();
+                        worksheet.Cell(row, 2).Value = xml.DhEmi.ToString();
+                        worksheet.Cell(row, 3).Value = xml.CnpjEmit;
+                        worksheet.Cell(row, 4).Value = xml.EmitXNome;
+                        worksheet.Cell(row, 5).Value = xml.CnpjEmit;
+                        worksheet.Cell(row, 6).Value = xml.DestXNome;
+                        worksheet.Cell(row, 7).Value = xml.Value.ToString();
+                        worksheet.Cell(row, 8).Value = xml.XmlKey;
+                        worksheet.Cell(row, 9).Value = xml.Value.ToString();
+                    }
+                    
 
                     row++;
                 }
