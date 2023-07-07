@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Xml;
+using XMLSearch.Data.Enum;
 
 namespace XMLSearch.Helper
 {
     public static class XmlTypeIdentifier
     {
-        public static string IdentifyXmlType(string xmlFilePath)
+        public static EnumTypeXML IdentifyXmlType(string xmlFilePath)
         {
             try
             {
@@ -27,24 +28,24 @@ namespace XMLSearch.Helper
                     string value = modNode.InnerText;
                     if (value == "55")
                     {
-                        return "NFE";
+                        return (EnumTypeXML)1;
                     }
                     else
                     {
-                        return "NFCe";
+                        return (EnumTypeXML)4;
                     }
                 }
                 else if (rootNode.SelectSingleNode("//CFe/infCFe", nsManager) != null)
-                    return "CFE";
+                    return (EnumTypeXML)2;
                 else if (rootNode.SelectSingleNode("//cte:infCte", nsManager) != null)
-                    return "CTE";
+                    return (EnumTypeXML)3;
                 else
-                    return "Desconhecido";
+                    return 0;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Erro ao identificar o tipo do XML: {ex.Message}");
-                return "Desconhecido";
+                return 0;
             }
         }
     }

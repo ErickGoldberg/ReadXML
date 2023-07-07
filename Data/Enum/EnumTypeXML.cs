@@ -1,5 +1,4 @@
 ﻿
-
 namespace XMLSearch.Data.Enum
 {
     public enum EnumTypeXML

@@ -14,4 +14,5 @@ public class XmlData : IXml
     public double Value { get; set; }
     EnumTypeXML IXml.TypeXml { get; set; }
     int IXml.NumberXml { get; set; }
+
 }
