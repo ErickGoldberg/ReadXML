@@ -13,13 +13,13 @@ namespace XMLSearch.Helper
             try
             {
                 var cfe = new CFE();
-                cfe.infCfe = ProcessinfCfe(doc3);
-                cfe.cNF = ProcessCNF(doc3);
-                cfe.dhEmi = ProcessDhEmi(doc3);
-                cfe.emitXNome = ProcessEmitXNome(doc3);
-                cfe.emitCnpj = ProcessEmitCNPJ(doc3);
-                cfe.emitIE = ProcessEmitIE(doc3);
-                cfe.vCFe = ProcessVNF(doc3);
+                cfe.InfCfe = ProcessinfCfe(doc3);
+                cfe.CNF = ProcessCNF(doc3);
+                cfe.DhEmi = ProcessDhEmi(doc3);
+                cfe.EmitXNome = ProcessEmitXNome(doc3);
+                cfe.EmitCnpj = ProcessEmitCNPJ(doc3);
+                cfe.EmitIE = ProcessEmitIE(doc3);
+                cfe.VCFe = ProcessVNF(doc3);
                 return cfe;
             }
             catch (Exception ex)

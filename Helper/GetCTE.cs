@@ -13,16 +13,16 @@ namespace XMLSearch.Helper
             var cte = new CTE();
             try
             {
-                cte.infCte = ProcessInfCte(doc2);
-                cte.nCT = ProcessNCT(doc2);
-                cte.dhEmi = ProcessDhEmi(doc2);
-                cte.emitXNome = ProcessEmitXNome(doc2);
-                cte.emitCnpj = ProcessEmitCNPJ(doc2);
-                cte.remXNome = ProcessRemXNome(doc2);
-                cte.remCnpj = ProcessRemCNPJ(doc2);
-                cte.destXNome = ProcessDestXNome(doc2);
-                cte.destCnpj = ProcessDestCNPJ(doc2);
-                cte.vCte = ProcessvCte(doc2);
+                cte.InfCte = ProcessInfCte(doc2);
+                cte.NCT = ProcessNCT(doc2);
+                cte.DhEmi = ProcessDhEmi(doc2);
+                cte.EmitXNome = ProcessEmitXNome(doc2);
+                cte.EmitCnpj = ProcessEmitCNPJ(doc2);
+                cte.RemXNome = ProcessRemXNome(doc2);
+                cte.RemCnpj = ProcessRemCNPJ(doc2);
+                cte.DestXNome = ProcessDestXNome(doc2);
+                cte.DestCnpj = ProcessDestCNPJ(doc2);
+                cte.VCte = ProcessvCte(doc2);
             }
             catch (Exception ex)
             {

@@ -13,3 +13,11 @@ C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\obj\Debug\net6.0
 C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\obj\Debug\net6.0\XMLSearch.pdb
 C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\obj\Debug\net6.0\XMLSearch.genruntimeconfig.cache
 C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\obj\Debug\net6.0\ref\XMLSearch.dll
+C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\bin\Debug\net6.0\ClosedXML.dll
+C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\bin\Debug\net6.0\DocumentFormat.OpenXml.dll
+C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\bin\Debug\net6.0\ExcelNumberFormat.dll
+C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\bin\Debug\net6.0\Irony.dll
+C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\bin\Debug\net6.0\SixLabors.Fonts.dll
+C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\bin\Debug\net6.0\System.IO.Packaging.dll
+C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\bin\Debug\net6.0\XLParser.dll
+C:\Users\Dev\Desktop\programming\Basic-back\XMLSearch\XMLSearch\obj\Debug\net6.0\XMLSearch.csproj.CopyComplete

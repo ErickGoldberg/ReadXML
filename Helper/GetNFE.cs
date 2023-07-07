@@ -9,14 +9,14 @@ public class GetNFE
         var nfe = new NFE();
         try
         {
-            nfe.inNfe = ProcessInfNFe(doc);
-            nfe.nNF = ProcessNNF(doc);
-            nfe.dhEmi = ProcessDhEmi(doc);
-            nfe.emitXNome = ProcessEmitXNome(doc);
-            nfe.emitCnpj = ProcessEmitCNPJ(doc);
-            nfe.destXNome = ProcessDestXNome(doc);
-            nfe.destCnpj = ProcessDestCNPJ(doc);
-            nfe.vNF = ProcessVNF(doc);
+            nfe.InNfe = ProcessInfNFe(doc);
+            nfe.NNF = ProcessNNF(doc);
+            nfe.DhEmi = ProcessDhEmi(doc);
+            nfe.EmitXNome = ProcessEmitXNome(doc);
+            nfe.EmitCnpj = ProcessEmitCNPJ(doc);
+            nfe.DestXNome = ProcessDestXNome(doc);
+            nfe.DestCnpj = ProcessDestCNPJ(doc);
+            nfe.VNF = ProcessVNF(doc);
         }
         catch (Exception ex)
         {
